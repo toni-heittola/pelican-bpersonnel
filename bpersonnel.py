@@ -231,8 +231,8 @@ def load_personnel_registry(source):
 
             if 'data' in personnel_registry:
                 personnel_registry = personnel_registry['data']
-            personnel_data = {}
-            set_data = {}
+            personnel_data = collections.OrderedDict()
+            set_data = collections.OrderedDict()
             if 'personnel' in personnel_registry:
                 for item in personnel_registry['personnel']:
                     for field in item:
@@ -251,9 +251,9 @@ def load_personnel_registry(source):
                     personnel_data[item['lastname'].lower() + '-' + item['firstname'].lower()] = item
 
             if 'sets' in personnel_registry:
-                set_data = {}
+                set_data = collections.OrderedDict()
                 for set in personnel_registry['sets']:
-                    set_dict = {}
+                    set_dict = collections.OrderedDict()
                     for item in personnel_registry['sets'][set]:
                         data = copy.deepcopy(personnel_data[item['lastname'].lower() + '-' + item['firstname'].lower()])
                         data.update(item)
