@@ -59,17 +59,27 @@ bpersonnel_default_settings = {
                         {% if scholar %}
                         <a class="icon" href="{{scholar}}"><i class="pull-right fa fa-google {{item_css}}"></i></a>
                         {% endif %}
+                        {% if linkedin %}
+                        <a class="icon" href="{{linkedin}}"><i class="pull-right fa fa-linkedin {{item_css}}"></i></a>
+                        {% endif %}
                         {% if email %}
                         <a class="icon" href="mailto:{{email}}"><i class="pull-right fa fa-envelope-o {{item_css}}"></i></a>
                         {% endif %}
                         </div>
+                        {% if title %}
+                        <div class="col-md-12">
+                        <p class="small text-muted">
+                        {{title}}
+                        </p>
+                        </div>
+                        {% endif %}
                         {% if affiliation_title %}
                         <div class="col-md-12">
                         <p class="small text-muted">
                             {% if affiliation_url %}
                             <a class="text" href="{{affiliation_url}}">
                             {% endif %}
-                                {{affiliation_title}}{% if affiliation_department %}, <br><em>{{affiliation_department}}</em>{% endif %}
+                                {{affiliation_title}}{% if affiliation_department %} <br><em>{{affiliation_department}}</em>{% endif %}
                             {% if affiliation_url %}
                             </a>
                             {% endif %}
