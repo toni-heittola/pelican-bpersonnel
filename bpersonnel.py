@@ -46,7 +46,7 @@ bpersonnel_default_settings = {
             <tr>
                 {% if photo %}
                 <td class="{{item_css}}" style="width: 65px;">
-                <img class="img img-circle" src="{{site_url}}/{{ photo }}" alt="{{firstname}} {{lastname}}" height="48px" width="48px">
+                <img class="img img-circle" src="{{site_url}}/{{ photo }}" alt="{{firstname}} {{lastname}}" width="48px">
                 </td>
                 {% endif %}
                 <td class="{{item_css}}">
