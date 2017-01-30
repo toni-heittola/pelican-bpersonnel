@@ -38,7 +38,9 @@ bpersonnel_default_settings = {
         'list': """
             {% if header %}<h3 class="section-heading text-center">{{header}}</h3>{% endif %}
             <div class="list-group bpersonnel-container">
-            {{list}}
+                <div class="row">
+                {{list}}
+                </div>
             </div>
         """},
     'item-template': {
@@ -100,15 +102,73 @@ bpersonnel_default_settings = {
                 </td>
             </tr>
         """,
-        'list': """<a class="list-group-item {{item_color}}" href="{{site_url}}/{{item_url}}">
-            <div class="row">
-                <div class="col-md-9"><h4 class="list-group-item-heading {{item_css}}">{{item_title}}</h4></div>
-                <div class="col-md-3"><h5 class="list-group-item-heading {{item_css}}"><strong>{{item_date}}</strong></h5></div>
+        'list': """
+            <div class="col-md-6 col-xs-12">
+                <div class="row list-group-item-" style="padding-bottom:0.5em;">
+                    {% if photo %}
+                    <div class="col-md-2 col-xs-2">
+                        <img class="img img-circle" src="{{site_url}}/{{ photo }}" alt="{{firstname}} {{lastname}}" width="55px">
+                    </div>
+                    {% endif %}
+                    <div class="col-md-8 col-xs-8">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4 class="list-group-item-heading {{item_css}}">{{firstname}} {{lastname}}</h4>
+                                {% if title %}
+                                <p class="text-muted">
+                                {{title}}
+                                </p>
+                                {% endif %}
+                            </div>
+                            {% if affiliation_title %}
+                            <div class="col-md-12">
+                                <p class="small text-muted">
+                                    {% if affiliation_url %}
+                                    <a class="text" href="{{affiliation_url}}">
+                                    {% endif %}
+                                        {{affiliation_title}}{% if affiliation_department %} <br><em>{{affiliation_department}}</em>{% endif %}
+                                    {% if affiliation_url %}
+                                    </a>
+                                    {% endif %}
+                                </p>
+                            </div>
+                            {% endif %}
+                            {% if coordinator_list %}
+                            <div class="col-md-12">
+                                <p class="small">Coordinator of <em>{{coordinator_list}}</em></p>
+                            </div>
+                            {% endif %}
+                            {% if responsibilities %}
+                            <div class="col-md-12">
+                                <p class="small"><em>{{responsibilities}}</em></p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-xs-2">
+                        {% if homepage %}
+                        <a class="icon" href="{{homepage}}"><i class="fa fa-home {{item_css}}"></i></a>
+                        {% endif %}
+                        {% if scholar %}
+                        <a class="icon" href="{{scholar}}"><i class="fa fa-google {{item_css}}"></i></a>
+                        {% endif %}
+                        {% if linkedin %}
+                        <a class="icon" href="{{linkedin}}"><i class="fa fa-linkedin {{item_css}}"></i></a>
+                        {% endif %}
+                        {% if email %}
+                        <a class="icon" href="mailto:{{email}}"><i class="fa fa-envelope-o {{item_css}}"></i></a>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
-            </a>
         """},
     'person-item-template': """
         <h4><strong>{{firstname}} {{lastname}}</strong></h4>
+        {% if title %}
+            <p class="text-muted">
+                {{title}}
+            </p>
+        {% endif %}
         <div class="row">
             <div class="col-md-10">
                 {% if coordinator_list %}
@@ -183,7 +243,10 @@ def load_personnel_registry(source):
                             field_list = []
                             for i in item[field]:
                                 parts = [x.strip() for x in i.split(',')]
-                                field_list.append('<a class="text" href="' + parts[1] + '">' + parts[0] + '</a>')
+                                if len(parts) == 2:
+                                    field_list.append('<a class="text" href="' + parts[1] + '">' + parts[0] + '</a>')
+                                else:
+                                    field_list.append(parts[0])
                             item[field] = ', '.join(field_list)
                     personnel_data[item['lastname'].lower() + '-' + item['firstname'].lower()] = item
 
@@ -203,7 +266,11 @@ def load_personnel_registry(source):
                                 field_list = []
                                 for i in item[field]:
                                     parts = [x.strip() for x in i.split(',')]
-                                    field_list.append('<a class="text" href="' + parts[1] + '">' + parts[0] + '</a>')
+                                    if len(parts) == 2:
+                                        field_list.append('<a class="text" href="' + parts[1] + '">' + parts[0] + '</a>')
+                                    else:
+                                        field_list.append(parts[0])
+
                                 item[field] = ', '.join(field_list)
                         set_dict[item['lastname'].lower() + '-' + item['firstname'].lower()] = item
                     set_data[set] = set_dict
@@ -290,13 +357,15 @@ def generate_listing(settings):
             personnel = collections.OrderedDict(sorted(personnel.items()))
 
         html = "\n"
+        main_highlight = False
         for person_key, person in personnel.iteritems():
             if 'main' in person and person['main']:
                 html += generate_listing_item(person=person, settings=settings) + "\n"
+                main_highlight = True
 
         for person_key, person in personnel.iteritems():
             if not 'main' in person or ('main' in person and not person['main']):
-                html += generate_listing_item(person=person, settings=settings) + "\n"
+                html += generate_listing_item(person=person, settings=settings, main_highlight=main_highlight) + "\n"
 
         html += "\n"
 
@@ -310,7 +379,7 @@ def generate_listing(settings):
         return ''
 
 
-def generate_listing_item(person, settings):
+def generate_listing_item(person, settings, main_highlight=False):
     """
 
     Generate person in listing
@@ -319,17 +388,19 @@ def generate_listing_item(person, settings):
     :param settings: settings dict
     :return: html content
     """
-
-    if settings['mode'] == 'panel':
-        if 'main' in person and person['main']:
-            item_css = 'active'
+    if main_highlight:
+        if settings['mode'] == 'panel':
+            if 'main' in person and person['main']:
+                item_css = 'active'
+            else:
+                item_css = ''
         else:
-            item_css = ''
+            if 'main' in person and person['main']:
+                item_css = ''
+            else:
+                item_css = 'text-muted'
     else:
-        if 'main' in person and person['main']:
-            item_css = ''
-        else:
-            item_css = 'text-muted'
+        item_css = ''
 
     valid_fields = [u'firstname', u'lastname']  # default fields
     valid_fields += settings['fields']          # user defined fields
