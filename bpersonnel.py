@@ -14,7 +14,7 @@ from jinja2 import Template
 from pelican import signals, contents
 import yaml
 import collections
-from IPython import embed
+
 logger = logging.getLogger(__name__)
 __version__ = '0.1.0'
 
