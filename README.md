@@ -140,7 +140,7 @@ Parameters for the plugin can be set in `pelicanconf.py' with following paramete
 | BPERSONNEL_PERSON_ITEM_TEMPLATE  | Jinja2 template |  | Template for person information card  |
 | BPERSONNEL_PANEL_COLOR          | String    | panel-primary |  CSS class used to color the panel template in the default template. Possible values: panel-default, panel-primary, panel-success, panel-info, panel-warning, panel-danger |
 | BPERSONNEL_HEADER               | String    | Content       | Header text  |
-| BPERSONNEL_SORT              | Boolean    | False       | Sorting of the listeing based on lastname,firstname  |
+| BPERSONNEL_SORT              | Boolean    | False       | Sorting of the listing based on lastname,firstname  |
 
 ### Content wise parameters
 
@@ -153,7 +153,7 @@ Parameters for the plugin can be set in `pelicanconf.py' with following paramete
 | BPERSONNEL_PANEL_COLOR    | panel-info | CSS class used to color the panel template in the default template. Possible values: panel-default, panel-primary, panel-success, panel-info, panel-warning, panel-danger |
 | BPERSONNEL_HEADER         | Personnel | Header text  |
 | BPERSONNEL_FIELDS         | email, photo, affiliation | comma separated list of field to be shown |
-| BPERSONNEL_SORT        | True | Sorting of the listeing based on lastname,firstname |
+| BPERSONNEL_SORT        | True | Sorting of the listing based on lastname,firstname |
 
 Example:
 
@@ -181,7 +181,7 @@ Valid for `<div>` classes `bpersonnel` and `bpersonnel-item`:
 | data-header               | Personnel   | Header text |
 | data-panel-color          | panel-info | CSS class used to color the panel template in the default template. Possible values: panel-default, panel-primary, panel-success, panel-info, panel-warning, panel-danger |
 | data-fields               | email, photo, affiliation | comma separated list of field to be shown |
-| data-sort                 | True | Sorting of the listeing based on lastname,firstname |
+| data-sort                 | True | Sorting of the listing based on lastname,firstname |
 
 Valid for `bpersonnel-item`:
 
