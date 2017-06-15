@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 __version__ = '0.1.0'
 
 bpersonnel_default_settings = {
-    'panel-color': 'panel-info',
+    'panel-color': 'panel-default',
     'header': 'Personnel',
     'mode': 'panel',
     'template': {
@@ -255,24 +255,33 @@ def load_personnel_registry(source):
                 for set in personnel_registry['sets']:
                     set_dict = collections.OrderedDict()
                     for item in personnel_registry['sets'][set]:
-                        data = copy.deepcopy(personnel_data[item['lastname'].lower() + '-' + item['firstname'].lower()])
-                        data.update(item)
-                        item.update(data)
-                        for field in item:
-                            if field.endswith('_list'):
-                                if not isinstance(item[field], list):
-                                    item[field] = [x.strip() for x in item[field].split(';')]
+                        key = item['lastname'].lower() + '-' + item['firstname'].lower()
+                        if key in personnel_data:
+                            data = copy.deepcopy(personnel_data[key])
+                            data.update(item)
+                            item.update(data)
+                            for field in item:
+                                if field.endswith('_list'):
+                                    if not isinstance(item[field], list):
+                                        item[field] = [x.strip() for x in item[field].split(';')]
 
-                                field_list = []
-                                for i in item[field]:
-                                    parts = [x.strip() for x in i.split(',')]
-                                    if len(parts) == 2:
-                                        field_list.append('<a class="text" href="' + parts[1] + '">' + parts[0] + '</a>')
-                                    else:
-                                        field_list.append(parts[0])
+                                    field_list = []
+                                    for i in item[field]:
+                                        parts = [x.strip() for x in i.split(',')]
+                                        if len(parts) == 2:
+                                            field_list.append('<a class="text" href="' + parts[1] + '">' + parts[0] + '</a>')
+                                        else:
+                                            field_list.append(parts[0])
 
-                                item[field] = ', '.join(field_list)
-                        set_dict[item['lastname'].lower() + '-' + item['firstname'].lower()] = item
+                                    item[field] = ', '.join(field_list)
+                            set_dict[item['lastname'].lower() + '-' + item['firstname'].lower()] = item
+                        else:
+                            logger.warn('`pelican-bpersonnel` failed to form set [{set}], person not found [firstname={firstname} ,lastname={lastname}]'.format(
+                                set=set,
+                                firstname=item['firstname'],
+                                lastname=item['lastname']
+                            ))
+                            return False
                     set_data[set] = set_dict
             return {
                 'personnel': personnel_data,
@@ -372,9 +381,9 @@ def generate_listing(settings):
         template = Template(settings['template'][settings['mode']].strip('\t\r\n').replace('&gt;', '>').replace('&lt;', '<'))
 
         return BeautifulSoup(template.render(list=html,
-                                             header=settings['header'],
-                                             site_url=settings['site-url'],
-                                             panel_color=settings['panel-color'],), "html.parser")
+                                             header=settings.get('header'),
+                                             site_url=settings.get('site-url'),
+                                             panel_color=settings.get('panel-color'),), "html.parser")
     else:
         return ''
 
@@ -425,6 +434,7 @@ def bpersonnel(content):
     Main processing
 
     """
+    global bpersonnel_settings
 
     if isinstance(content, contents.Static):
         return
@@ -522,7 +532,7 @@ def process_page_metadata(generator, metadata):
         bpersonnel_settings['mode'] = metadata['bpersonnel_mode']
 
     if u'bpersonnel_panel_color' in metadata:
-        bpersonnel_settings['panel_color'] = metadata['bpersonnel_panel_color']
+        bpersonnel_settings['panel-color'] = metadata['bpersonnel_panel_color']
 
     if u'bpersonnel_header' in metadata:
         bpersonnel_settings['header'] = metadata['bpersonnel_header']
