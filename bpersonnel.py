@@ -468,7 +468,8 @@ def bpersonnel(content):
             settings['header'] = get_attribute(bpersonnel_div.attrs, 'header', bpersonnel_settings['header'])
             settings['panel-color'] = get_attribute(bpersonnel_div.attrs, 'panel-color', bpersonnel_settings['panel-color'])
             settings['fields'] = get_attribute(bpersonnel_div.attrs, 'fields', bpersonnel_settings['fields'])
-            settings['fields'] = [x.strip() for x in settings['fields'].split(',')]
+            if isinstance(settings['fields'], str):
+                settings['fields'] = [x.strip() for x in settings['fields'].split(',')]
             if not isinstance(settings['fields'], list):
                 settings['fields'] = [x.strip() for x in settings['fields'].split(',')]
             settings['sort'] = get_attribute(bpersonnel_div.attrs, 'sort', bpersonnel_settings['sort'])
