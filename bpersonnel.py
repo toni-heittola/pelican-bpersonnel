@@ -231,6 +231,7 @@ def load_personnel_registry(source):
 
             if 'data' in personnel_registry:
                 personnel_registry = personnel_registry['data']
+
             personnel_data = collections.OrderedDict()
             set_data = collections.OrderedDict()
             if 'personnel' in personnel_registry:
@@ -248,14 +249,15 @@ def load_personnel_registry(source):
                                 else:
                                     field_list.append(parts[0])
                             item[field] = ', '.join(field_list)
-                    personnel_data[item['lastname'].lower() + '-' + item['firstname'].lower()] = item
+                    key = item['lastname'].lower().replace(' ','_') + '-' + item['firstname'].lower().replace(' ','_')
+                    personnel_data[key] = item
 
             if 'sets' in personnel_registry:
                 set_data = collections.OrderedDict()
                 for set in personnel_registry['sets']:
                     set_dict = collections.OrderedDict()
                     for item in personnel_registry['sets'][set]:
-                        key = item['lastname'].lower() + '-' + item['firstname'].lower()
+                        key = item['lastname'].lower().replace(' ', '_') + '-' + item['firstname'].lower().replace(' ','_')
                         if key in personnel_data:
                             data = copy.deepcopy(personnel_data[key])
                             data.update(item)
@@ -274,9 +276,10 @@ def load_personnel_registry(source):
                                             field_list.append(parts[0])
 
                                     item[field] = ', '.join(field_list)
-                            set_dict[item['lastname'].lower() + '-' + item['firstname'].lower()] = item
+
+                            set_dict[key] = item
                         else:
-                            logger.warn('`pelican-bpersonnel` failed to form set [{set}], person not found [firstname={firstname} ,lastname={lastname}]'.format(
+                            logger.warn('`pelican-bpersonnel` failed to form set [{set}], person not found firstname=[{firstname}] ,lastname=[{lastname}]'.format(
                                 set=set,
                                 firstname=item['firstname'],
                                 lastname=item['lastname']
@@ -323,10 +326,30 @@ def generate_person_card(settings):
     personnel_registry = load_personnel_registry(source=settings['data-source'])
 
     if personnel_registry:
+        key = settings['person-lastname'].lower().replace(' ','_') + '-' + settings['person-firstname'].lower().replace(' ','_')
+
         if settings['set'] and 'sets' in personnel_registry and settings['set'] in personnel_registry['sets']:
-            person_data = personnel_registry['sets'][settings['set']][settings['person-lastname'].lower() + '-' + settings['person-firstname'].lower()]
+            if key in personnel_registry['sets'][settings['set']]:
+                person_data = personnel_registry['sets'][settings['set']][key]
+            else:
+                logger.warn(
+                    '`pelican-bpersonnel` failed to form set [{set}], person not found firstname=[{firstname}] ,lastname=[{lastname}]'.format(
+                        set=settings['set'],
+                        firstname=settings['person-firstname'],
+                        lastname=settings['person-lastname']
+                    ))
+                return False
         else:
-            person_data = personnel_registry['personnel'][settings['person-lastname'].lower() + '-' + settings['person-firstname'].lower()]
+            if key in personnel_registry['personnel']:
+                person_data = personnel_registry['personnel'][key]
+            else:
+                logger.warn(
+                    '`pelican-bpersonnel` failed to find personel information for firstname=[{firstname}] ,lastname=[{lastname}]'.format(
+                        set=settings['set'],
+                        firstname=settings['person-firstname'],
+                        lastname=settings['person-lastname']
+                    ))
+                return False
 
         valid_fields = [u'firstname', u'lastname']  # default fields
         valid_fields += settings['fields']  # user defined fields
