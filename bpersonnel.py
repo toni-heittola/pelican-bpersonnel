@@ -469,8 +469,10 @@ def bpersonnel(content):
         # We have page variable set
         bpersonnel_settings['show'] = True
         div_html = generate_listing(settings=bpersonnel_settings)
+
         if div_html:
             content.bpersonnel = div_html.decode()
+
     else:
         content.bpersonnel = None
 
@@ -480,10 +482,11 @@ def bpersonnel(content):
 
     if bpersonnel_divs:
         bpersonnel_settings['show'] = True
+
         for bpersonnel_div in bpersonnel_divs:
             # We have div in the page
             settings = copy.deepcopy(bpersonnel_settings)
-            settings['data-source'] = get_attribute(bpersonnel_div.attrs, 'yaml', bpersonnel_settings['data-source'])
+            settings['data-source'] = get_attribute(bpersonnel_div.attrs, 'source', bpersonnel_settings['data-source'])
             settings['set'] = get_attribute(bpersonnel_div.attrs, 'set', bpersonnel_settings['set'])
             settings['template'] = get_attribute(bpersonnel_div.attrs, 'template', bpersonnel_settings['template'])
             settings['item-template'] = get_attribute(bpersonnel_div.attrs, 'item-template', bpersonnel_settings['item-template'])
@@ -491,13 +494,18 @@ def bpersonnel(content):
             settings['header'] = get_attribute(bpersonnel_div.attrs, 'header', bpersonnel_settings['header'])
             settings['panel-color'] = get_attribute(bpersonnel_div.attrs, 'panel-color', bpersonnel_settings['panel-color'])
             settings['fields'] = get_attribute(bpersonnel_div.attrs, 'fields', bpersonnel_settings['fields'])
+
             if isinstance(settings['fields'], str):
                 settings['fields'] = [x.strip() for x in settings['fields'].split(',')]
+
             if not isinstance(settings['fields'], list):
                 settings['fields'] = [x.strip() for x in settings['fields'].split(',')]
+
             settings['sort'] = get_attribute(bpersonnel_div.attrs, 'sort', bpersonnel_settings['sort'])
+
             if settings['sort'] == 'True' or settings['sort'] == 'true':
                 settings['sort'] = True
+
             else:
                 settings['sort'] = False
 
@@ -508,6 +516,7 @@ def bpersonnel(content):
     # bpersonnel card divs
     if bpersonnel_item_divs:
         bpersonnel_settings['show'] = True
+
         for bpersonnel_card_div in bpersonnel_item_divs:
             # We have div in the page
             settings = copy.deepcopy(bpersonnel_settings)
@@ -521,10 +530,12 @@ def bpersonnel(content):
             settings['person-firstname'] = get_attribute(bpersonnel_card_div.attrs, 'person-firstname', bpersonnel_settings['person-firstname'])
             settings['person-lastname'] = get_attribute(bpersonnel_card_div.attrs, 'person-lastname', bpersonnel_settings['person-lastname'])
             settings['fields'] = get_attribute(bpersonnel_card_div.attrs, 'fields', bpersonnel_settings['fields'])
+
             if not isinstance(settings['fields'], list):
                 settings['fields'] = [x.strip() for x in settings['fields'].split(',')]
 
             div_html = generate_person_card(settings=settings)
+
             if div_html:
                 bpersonnel_card_div.replaceWith(div_html)
 
