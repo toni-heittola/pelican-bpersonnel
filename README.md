@@ -141,6 +141,7 @@ Parameters for the plugin can be set in `pelicanconf.py' with following paramete
 | BPERSONNEL_PANEL_COLOR          | String    | panel-primary |  CSS class used to color the panel template in the default template. Possible values: panel-default, panel-primary, panel-success, panel-info, panel-warning, panel-danger |
 | BPERSONNEL_HEADER               | String    | Content       | Header text  |
 | BPERSONNEL_SORT              | Boolean    | False       | Sorting of the listing based on lastname,firstname  |
+| BPERSONNEL_DEBUG_PROCESSING | Boolean    | False  | Show extra information in when run with `DEBUG=1` |
 
 ### Content wise parameters
 
