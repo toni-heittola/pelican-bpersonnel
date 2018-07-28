@@ -211,7 +211,8 @@ bpersonnel_default_settings = {
     'person-lastname': None,
     'sort': False,
     'fields': '',
-    'site-url': ''
+    'site-url': '',
+    'debug_processing': False
 }
 
 bpersonnel_settings = copy.deepcopy(bpersonnel_default_settings)
@@ -481,6 +482,13 @@ def bpersonnel(content):
     bpersonnel_item_divs = soup.find_all('div', class_='bpersonnel-item')
 
     if bpersonnel_divs:
+        if bpersonnel_settings['debug_processing']:
+            logger.debug(msg='[{plugin_name}] title:[{title}] divs:[{div_count}]'.format(
+                plugin_name='bpersonnel',
+                title=content.title,
+                div_count=len(bpersonnel_divs)
+            ))
+
         bpersonnel_settings['show'] = True
 
         for bpersonnel_div in bpersonnel_divs:
@@ -515,6 +523,13 @@ def bpersonnel(content):
 
     # bpersonnel card divs
     if bpersonnel_item_divs:
+        if bpersonnel_settings['debug_processing']:
+            logger.debug(msg='[{plugin_name}] title:[{title}] divs:[{div_count}]'.format(
+                plugin_name='bpersonnel-item',
+                title=content.title,
+                div_count=len(bpersonnel_item_divs)
+            ))
+
         bpersonnel_settings['show'] = True
 
         for bpersonnel_card_div in bpersonnel_item_divs:
@@ -609,6 +624,9 @@ def init_default_config(pelican):
 
     if 'BPERSONNEL_SORT' in pelican.settings:
         bpersonnel_default_settings['sort'] = pelican.settings['BPERSONNEL_SORT']
+
+    if 'BPERSONNEL_DEBUG_PROCESSING' in pelican.settings:
+        bpersonnel_default_settings['debug_processing'] = pelican.settings['BPERSONNEL_DEBUG_PROCESSING']
 
     bpersonnel_settings = copy.deepcopy(bpersonnel_default_settings)
 
