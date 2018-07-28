@@ -390,12 +390,12 @@ def generate_listing(settings):
 
         html = "\n"
         main_highlight = False
-        for person_key, person in personnel.iteritems():
+        for person_key, person in personnel.items():
             if 'main' in person and person['main']:
                 html += generate_listing_item(person=person, settings=settings) + "\n"
                 main_highlight = True
 
-        for person_key, person in personnel.iteritems():
+        for person_key, person in personnel.items():
             if not 'main' in person or ('main' in person and not person['main']):
                 html += generate_listing_item(person=person, settings=settings, main_highlight=main_highlight) + "\n"
 
