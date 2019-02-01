@@ -38,7 +38,7 @@ bpersonnel_default_settings = {
         'list': """
             {% if header %}<h3 class="section-heading text-center">{{header}}</h3>{% endif %}
             <div class="list-group bpersonnel-container">
-                <div class="row">
+                <div class="row" style="display:flex;display:-webkit-flex;flex-wrap:wrap;">
                 {{list}}
                 </div>
             </div>
