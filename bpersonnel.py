@@ -14,6 +14,7 @@ from jinja2 import Template
 from pelican import signals, contents
 import yaml
 import collections
+from io import open
 
 logger = logging.getLogger(__name__)
 __version__ = '0.1.0'
@@ -229,10 +230,10 @@ def load_personnel_registry(source):
         try:
             from distutils.version import LooseVersion
             if LooseVersion(str(yaml.__version__)) >= "5.1":
-                with open(source, 'r') as field:
+                with open(source, 'r', encoding='utf-8') as field:
                     personnel_registry = yaml.load(field, Loader=yaml.FullLoader)
             else:
-                with open(source, 'r') as field:
+                with open(source, 'r', encoding='utf-8') as field:
                     personnel_registry = yaml.load(field)
 
             if 'data' in personnel_registry:
