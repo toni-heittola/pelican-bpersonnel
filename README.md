@@ -81,7 +81,7 @@ Example yaml-file:
         email: test.person@foo.bar
         homepage: http://www.test.person.hompage.com
         scholar: 
-        affiliations:
+        affiliation:
           - title: University X1
             abbreviation: UX1
             department: 
@@ -124,7 +124,7 @@ The default templates support following fields:
 - `affiliation_abbreviation`
 - `affiliation_department`
 - `affiliation_url`
-- `affiliations`, dict with fields `title`, `abbreviation`, `department`, `url`
+- `affiliation`, dict with fields `title`, `abbreviation`, `department`, `url`
 - `photo`, link profile image, use 1:1 aspect ratio
 - `responsibilities`
 - `coordinator_list`

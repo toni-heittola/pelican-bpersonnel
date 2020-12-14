@@ -76,13 +76,14 @@ bpersonnel_default_settings = {
                         </p>
                         </div>
                         {% endif %}
-                        {% if affiliation_title or affiliations %}
+                        {% if affiliation_title or affiliation %}
                         <div class="col-md-12">
                             <p class="small text-muted">       
-                            {% if affiliations %}
-                                {% for affiliation in affiliations -%}
+                            {% if affiliation %}
+                                {% for affiliation in affiliation -%}
                                     {% if affiliation.title -%}
-                                        {% if affiliation.url %}<a class="text" href="{{affiliation.url}}">{% endif -%}{{affiliation.title|e}}{% if affiliation.department %}, <br><em>{{affiliation.department}}</em>{% endif %}{% if affiliation.url %}</a>{% endif %}{% if not loop.last %}, {% endif %}
+                                        {% if affiliation.url %}<a class="text" href="{{affiliation.url}}">{% endif -%}
+                                        {{affiliation.title|e}}{% if affiliation.department %}, <em>{{affiliation.department}}</em>{% endif %}{% if affiliation.url %}</a>{% endif %}{% if not loop.last %}<br>{% endif %}
                                     {% endif %}
                                 {% endfor %}                
                             {% endif %}                                    
@@ -126,13 +127,13 @@ bpersonnel_default_settings = {
                                 </p>
                                 {% endif %}
                             </div>
-                            {% if affiliation_title or affiliations %}
+                            {% if affiliation_title or affiliation %}
                             <div class="col-md-12">
                                 <p class="small text-muted">          
-                                {% if affiliations %}
-                                    {% for affiliation in affiliations -%}
+                                {% if affiliation %}
+                                    {% for affiliation in affiliation -%}
                                         {% if affiliation.title -%}
-                                            {% if affiliation.url %}<a class="text" href="{{affiliation.url}}">{% endif -%}{{affiliation.title|e}}{% if affiliation.department %}, <br><em>{{affiliation.department}}</em>{% endif %}{% if affiliation.url %}</a>{% endif %}{% if not loop.last %}, {% endif %}
+                                            {% if affiliation.url %}<a class="text" href="{{affiliation.url}}">{% endif -%}{{affiliation.title|e}}{% if affiliation.department %}, <em>{{affiliation.department}}</em>{% endif %}{% if affiliation.url %}</a>{% endif %}{% if not loop.last %}<br>{% endif %}
                                         {% endif %}
                                     {% endfor %}                
                                 {% endif %}                                    
@@ -188,12 +189,12 @@ bpersonnel_default_settings = {
                 {% if responsibilities %}
                 <p class="small text-muted">Responsibilities: {{responsibilities}}</p>
                 {% endif %}                
-                {% if affiliation_title or affiliations %}
+                {% if affiliation_title or affiliation %}
                 <p class="small">                
-                    {% if affiliations %}
-                        {% for affiliation in affiliations -%}
+                    {% if affiliation %}
+                        {% for affiliation in affiliation -%}
                             {% if affiliation.title -%}
-                                {% if affiliation.url %}<a class="text" href="{{affiliation.url}}">{% endif -%}{{affiliation.title|e}}{% if affiliation.department %}, <br><em>{{affiliation.department}}</em>{% endif %}{% if affiliation.url %}</a>{% endif %}{% if not loop.last %}, {% endif %}
+                                {% if affiliation.url %}<a class="text" href="{{affiliation.url}}">{% endif -%}{{affiliation.title|e}}{% if affiliation.department %}, <em>{{affiliation.department}}</em>{% endif %}{% if affiliation.url %}</a>{% endif %}{% if not loop.last %}<br>{% endif %}
                             {% endif %}
                         {% endfor %}                
                     {% endif %}                                    
@@ -381,11 +382,15 @@ def generate_person_card(settings):
         valid_fields = [u'firstname', u'lastname']  # default fields
         valid_fields += settings['fields']          # user defined fields
 
-        filtered_fields = {}
-        for field in person_data:
-            if field in valid_fields:
-                filtered_fields[field] = person_data[field]
-            else:
+        filtered_fields = person_data.copy()
+        for field in filtered_fields:
+            if isinstance(filtered_fields[field], list):
+                for list_item_id, list_item in enumerate(filtered_fields[field]):
+                    for item in list_item:
+                        if field + '.' + item not in valid_fields:
+                            filtered_fields[field][list_item_id][item] = None
+
+            elif field not in valid_fields:
                 filtered_fields[field] = None
 
         template = Template(settings['person-item-template'].strip('\t\r\n').replace('&gt;', '>').replace('&lt;', '<'))
@@ -465,11 +470,15 @@ def generate_listing_item(person, settings, main_highlight=False):
     valid_fields = [u'firstname', u'lastname']  # default fields
     valid_fields += settings['fields']          # user defined fields
 
-    filtered_fields = {}
-    for field in person:
-        if field in valid_fields:
-            filtered_fields[field] = person[field]
-        else:
+    filtered_fields = person.copy()
+    for field in filtered_fields:
+        if isinstance(filtered_fields[field], list):
+            for list_item_id, list_item in enumerate(filtered_fields[field]):
+                for item in list_item:
+                    if field+'.'+item not in valid_fields:
+                        filtered_fields[field][list_item_id][item] = None
+
+        elif field not in valid_fields:
             filtered_fields[field] = None
 
     template = Template(settings['item-template'][settings['mode']].strip('\t\r\n').replace('&gt;', '>').replace('&lt;', '<'))
