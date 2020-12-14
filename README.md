@@ -70,22 +70,27 @@ Example yaml-file:
         email: test.person@foo.bar
         homepage: http://www.test.person.hompage.com
         scholar: 
-        affiliation:
-          title: University X
-          abbreviation: UX
-          department: 
-          url: 
+        affiliation_title: University X
+        affiliation_abbreviation: UX
+        affiliation_department: 
+        affiliation_url:
+         
         photo: images/face.jpg
       - firstname: Test
         lastname: Person2
         email: test.person@foo.bar
         homepage: http://www.test.person.hompage.com
         scholar: 
-        affiliation:
-          title: University X
-          abbreviation: UX
-          department: 
-          url: 
+        affiliations:
+          - title: University X1
+            abbreviation: UX1
+            department: 
+            url:
+          - title: University X2
+            abbreviation: UX2
+            department: 
+            url:          
+               
         photo: images/face.jpg
         responsibilities: reading
         
@@ -110,19 +115,20 @@ Fields having values in sets (other than firstname and lastname) will override p
 
 The default templates support following fields:
 
-- firstname
-- lastname
-- email
-- homepage, homepage url
-- scholar, google scholar link
-- affiliation_title
-- affiliation_abbreviation
-- affiliation_department
-- affiliation_url
-- photo, link profile image, use 1:1 aspect ratio
-- responsibilities
-- coordinator_list
-- main, if set true person is highlighted
+- `firstname`
+- `lastname`
+- `email`
+- `homepage`, homepage url
+- `scholar`, google scholar link
+- `affiliation_title`
+- `affiliation_abbreviation`
+- `affiliation_department`
+- `affiliation_url`
+- `affiliations`, dict with fields `title`, `abbreviation`, `department`, `url`
+- `photo`, link profile image, use 1:1 aspect ratio
+- `responsibilities`
+- `coordinator_list`
+- `main`, if set true person is highlighted
 
 ## Parameters
 

@@ -76,17 +76,22 @@ bpersonnel_default_settings = {
                         </p>
                         </div>
                         {% endif %}
-                        {% if affiliation_title %}
+                        {% if affiliation_title or affiliations %}
                         <div class="col-md-12">
-                        <p class="small text-muted">
-                            {% if affiliation_url %}
-                            <a class="text" href="{{affiliation_url}}">
+                            <p class="small text-muted">       
+                            {% if affiliations %}
+                                {% for affiliation in affiliations -%}
+                                    {% if affiliation.title -%}
+                                        {% if affiliation.url %}<a class="text" href="{{affiliation.url}}">{% endif -%}{{affiliation.title|e}}{% if affiliation.department %}, <br><em>{{affiliation.department}}</em>{% endif %}{% if affiliation.url %}</a>{% endif %}{% if not loop.last %}, {% endif %}
+                                    {% endif %}
+                                {% endfor %}                
+                            {% endif %}                                    
+                            {% if affiliation_title %}                
+                                {% if affiliation_url %}<a class="text" href="{{affiliation_url}}">{% endif %}
+                                {{affiliation_title}}{% if affiliation_department %}, <br><em>{{affiliation_department}}</em>{% endif %}
+                                {% if affiliation_url %}</a>{% endif %}
                             {% endif %}
-                                {{affiliation_title}}{% if affiliation_department %} <br><em>{{affiliation_department}}</em>{% endif %}
-                            {% if affiliation_url %}
-                            </a>
-                            {% endif %}
-                        </p>
+                            </p>
                         </div>
                         {% endif %}
                         {% if coordinator_list %}
@@ -121,16 +126,21 @@ bpersonnel_default_settings = {
                                 </p>
                                 {% endif %}
                             </div>
-                            {% if affiliation_title %}
+                            {% if affiliation_title or affiliations %}
                             <div class="col-md-12">
-                                <p class="small text-muted">
-                                    {% if affiliation_url %}
-                                    <a class="text" href="{{affiliation_url}}">
-                                    {% endif %}
-                                        {{affiliation_title}}{% if affiliation_department %} <br><em>{{affiliation_department}}</em>{% endif %}
-                                    {% if affiliation_url %}
-                                    </a>
-                                    {% endif %}
+                                <p class="small text-muted">          
+                                {% if affiliations %}
+                                    {% for affiliation in affiliations -%}
+                                        {% if affiliation.title -%}
+                                            {% if affiliation.url %}<a class="text" href="{{affiliation.url}}">{% endif -%}{{affiliation.title|e}}{% if affiliation.department %}, <br><em>{{affiliation.department}}</em>{% endif %}{% if affiliation.url %}</a>{% endif %}{% if not loop.last %}, {% endif %}
+                                        {% endif %}
+                                    {% endfor %}                
+                                {% endif %}                                    
+                                {% if affiliation_title %}                
+                                    {% if affiliation_url %}<a class="text" href="{{affiliation_url}}">{% endif %}
+                                    {{affiliation_title}}{% if affiliation_department %}, <br><em>{{affiliation_department}}</em>{% endif %}
+                                    {% if affiliation_url %}</a>{% endif %}
+                                {% endif %}
                                 </p>
                             </div>
                             {% endif %}
@@ -177,12 +187,21 @@ bpersonnel_default_settings = {
                 {% endif %}
                 {% if responsibilities %}
                 <p class="small text-muted">Responsibilities: {{responsibilities}}</p>
-                {% endif %}
-                {% if affiliation_title %}
-                <p class="small">
-                    {% if affiliation_url %}<a class="text" href="{{affiliation_url}}">{% endif %}
-                    {{affiliation_title}}{% if affiliation_department %}, <br><em>{{affiliation_department}}</em>{% endif %}
-                    {% if affiliation_url %}</a>{% endif %}
+                {% endif %}                
+                {% if affiliation_title or affiliations %}
+                <p class="small">                
+                    {% if affiliations %}
+                        {% for affiliation in affiliations -%}
+                            {% if affiliation.title -%}
+                                {% if affiliation.url %}<a class="text" href="{{affiliation.url}}">{% endif -%}{{affiliation.title|e}}{% if affiliation.department %}, <br><em>{{affiliation.department}}</em>{% endif %}{% if affiliation.url %}</a>{% endif %}{% if not loop.last %}, {% endif %}
+                            {% endif %}
+                        {% endfor %}                
+                    {% endif %}                                    
+                    {% if affiliation_title %}                
+                        {% if affiliation_url %}<a class="text" href="{{affiliation_url}}">{% endif %}
+                        {{affiliation_title}}{% if affiliation_department %}, <br><em>{{affiliation_department}}</em>{% endif %}
+                        {% if affiliation_url %}</a>{% endif %}
+                    {% endif %}
                 </p>
                 {% endif %}
                 <p>
@@ -293,6 +312,7 @@ def load_personnel_registry(source):
                             ))
                             return False
                     set_data[set] = set_dict
+
             return {
                 'personnel': personnel_data,
                 'sets': set_data
@@ -359,7 +379,7 @@ def generate_person_card(settings):
                 return False
 
         valid_fields = [u'firstname', u'lastname']  # default fields
-        valid_fields += settings['fields']  # user defined fields
+        valid_fields += settings['fields']          # user defined fields
 
         filtered_fields = {}
         for field in person_data:
@@ -372,6 +392,7 @@ def generate_person_card(settings):
 
         filtered_fields['site_url'] = settings['site-url']
         html = BeautifulSoup(template.render(**filtered_fields), "html.parser")
+
         return html
     else:
         return ''
