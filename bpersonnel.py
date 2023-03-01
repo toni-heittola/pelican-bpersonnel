@@ -571,7 +571,7 @@ def bpersonnel(content):
         for bpersonnel_card_div in bpersonnel_item_divs:
             # We have div in the page
             settings = copy.deepcopy(bpersonnel_settings)
-            settings['data-source'] = get_attribute(bpersonnel_card_div.attrs, 'yaml', bpersonnel_settings['data-source'])
+            settings['data-source'] = get_attribute(bpersonnel_card_div.attrs, 'source', bpersonnel_settings['data-source'])
             settings['set'] = get_attribute(bpersonnel_card_div.attrs, 'set', bpersonnel_settings['set'])
             settings['template'] = get_attribute(bpersonnel_card_div.attrs, 'template', bpersonnel_settings['template'])
             settings['item-template'] = get_attribute(bpersonnel_card_div.attrs, 'item-template', bpersonnel_settings['item-template'])
