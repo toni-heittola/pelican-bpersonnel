@@ -20,120 +20,95 @@ logger = logging.getLogger(__name__)
 __version__ = '0.1.0'
 
 bpersonnel_default_settings = {
+    'template-mode': 'bs3',
     'panel-color': 'panel-default',
     'header': 'Personnel',
     'mode': 'panel',
     'template': {
-        'panel': """
-            <div class="panel {{ panel_color }}">
-              {% if header %}
-              <div class="panel-heading">
-                <h3 class="panel-title">{{header}}</h3>
-              </div>
-              {% endif %}
-              <table class="table bpersonnel-container">
-              {{list}}
-              </table>
-            </div>
-        """,
-        'list': """
-            {% if header %}<h3 class="section-heading text-center">{{header}}</h3>{% endif %}
-            <div class="list-group bpersonnel-container">
-                <div class="row" style="display:flex;display:-webkit-flex;flex-wrap:wrap;">
-                {{list}}
+        'bs3': {
+            'panel': """
+                <div class="panel {{ panel_color }}">
+                  {% if header %}
+                  <div class="panel-heading">
+                    <h3 class="panel-title">{{header}}</h3>
+                  </div>
+                  {% endif %}
+                  <table class="table bpersonnel-container">
+                  {{list}}
+                  </table>
                 </div>
-            </div>
-        """},
+            """,
+                        'list': """
+                {% if header %}<h3 class="section-heading text-center">{{header}}</h3>{% endif %}
+                <div class="list-group bpersonnel-container">
+                    <div class="row" style="display:flex;display:-webkit-flex;flex-wrap:wrap;">
+                    {{list}}
+                    </div>
+                </div>
+            """
+        },
+        'bs5': {
+            'panel': """
+                <div class="card hidden-print">
+                  {% if header %}
+                    <h6 class="card-header {{ panel_color }} ">
+                        {{header}}
+                    </h6>                                    
+                  {% endif %}                  
+                  <table class="table bpersonnel-container mb-0">
+                  {{list}}
+                  </table>
+                </div>
+            """,
+            'list': """
+                {% if header %}<h4 class="section-heading text-center">{{header}}</h4>{% endif %}
+                <div class="list-group bpersonnel-container">
+                    <div class="row" style="display:flex;display:-webkit-flex;flex-wrap:wrap;">
+                    {{list}}
+                    </div>
+                </div>
+            """
+        }
+    },
     'item-template': {
-        'panel': """
-            <tr>
-                {% if photo %}
-                <td class="{{item_css}}" style="width: 65px;">
-                <img class="img img-circle" src="{{site_url}}/{{ photo }}" alt="{{firstname}} {{lastname}}" width="48px">
-                </td>
-                {% endif %}
-                <td class="{{item_css}}">
-                    <div class="row">
-                        <div class="col-md-12">
-                        <strong>{{firstname}} {{lastname}}</strong>
-                        {% if homepage %}
-                        <a class="icon" href="{{homepage}}"><i class="pull-right fa fa-home {{item_css}}"></i></a>
-                        {% endif %}
-                        {% if scholar %}
-                        <a class="icon" href="{{scholar}}"><i class="pull-right fa fa-google {{item_css}}"></i></a>
-                        {% endif %}
-                        {% if linkedin %}
-                        <a class="icon" href="{{linkedin}}"><i class="pull-right fa fa-linkedin {{item_css}}"></i></a>
-                        {% endif %}
-                        {% if email %}
-                        <a class="icon" href="mailto:{{email}}"><i class="pull-right fa fa-envelope-o {{item_css}}"></i></a>
-                        {% endif %}
-                        </div>
-                        {% if title %}
-                        <div class="col-md-12">
-                        <p class="small text-muted">
-                        {{title}}
-                        </p>
-                        </div>
-                        {% endif %}
-                        {% if affiliation_title or affiliation %}
-                        <div class="col-md-12">
-                            <p class="small text-muted">       
-                            {% if affiliation %}
-                                {% for affiliation in affiliation -%}
-                                    {% if affiliation.title -%}
-                                        {% if affiliation.url %}<a class="text" href="{{affiliation.url}}">{% endif -%}
-                                        {{affiliation.title|e}}{% if affiliation.department %}, <em>{{affiliation.department}}</em>{% endif %}{% if affiliation.url %}</a>{% endif %}{% if not loop.last %}<br>{% endif %}
-                                    {% endif %}
-                                {% endfor %}                
-                            {% endif %}                                    
-                            {% if affiliation_title %}                
-                                {% if affiliation_url %}<a class="text" href="{{affiliation_url}}">{% endif %}
-                                {{affiliation_title}}{% if affiliation_department %}, <br><em>{{affiliation_department}}</em>{% endif %}
-                                {% if affiliation_url %}</a>{% endif %}
-                            {% endif %}
-                            </p>
-                        </div>
-                        {% endif %}
-                        {% if coordinator_list %}
-                        <div class="col-md-12">
-                        <p class="small text-right">Coordinator of <em>{{coordinator_list}}</em></p>
-                        </div>
-                        {% endif %}
-                        {% if responsibilities %}
-                        <div class="col-md-12">
-                        <p class="small text-right"><em>{{responsibilities}}</em></p>
-                        </div>
-                        {% endif %}
-                    </div>
-                </td>
-            </tr>
-        """,
-        'list': """
-            <div class="col-md-6 col-xs-12">
-                <div class="row list-group-item-" style="padding-bottom:0.5em;">
+        'bs3': {
+            'panel': """
+                <tr>
                     {% if photo %}
-                    <div class="col-md-2 col-xs-2">
-                        <img class="img img-circle" src="{{site_url}}/{{ photo }}" alt="{{firstname}} {{lastname}}" width="55px">
-                    </div>
+                    <td class="{{item_css}}" style="width: 65px;">
+                        <img class="img img-circle" src="{{site_url}}/{{ photo }}" alt="{{firstname}} {{lastname}}" width="48px">
+                    </td>
                     {% endif %}
-                    <div class="col-md-8 col-xs-8">
+                    <td class="{{item_css}}">
                         <div class="row">
                             <div class="col-md-12">
-                                <h4 class="list-group-item-heading {{item_css}}">{{firstname}} {{lastname}}</h4>
-                                {% if title %}
-                                <p class="text-muted">
-                                {{title}}
-                                </p>
+                                <strong>{{firstname}} {{lastname}}</strong>
+                                {% if homepage %}
+                                <a class="icon" href="{{homepage}}"><i class="pull-right fa fa-home {{item_css}}"></i></a>
+                                {% endif %}
+                                {% if scholar %}
+                                <a class="icon" href="{{scholar}}"><i class="pull-right fa fa-google {{item_css}}"></i></a>
+                                {% endif %}
+                                {% if linkedin %}
+                                <a class="icon" href="{{linkedin}}"><i class="pull-right fa fa-linkedin {{item_css}}"></i></a>
+                                {% endif %}
+                                {% if email %}
+                                <a class="icon" href="mailto:{{email}}"><i class="pull-right fa fa-envelope-o {{item_css}}"></i></a>
                                 {% endif %}
                             </div>
+                            {% if title %}
+                            <div class="col-md-12">
+                                <p class="small text-muted">{{title}}</p>
+                            </div>
+                            {% endif %}
                             {% if affiliation_title or affiliation %}
                             <div class="col-md-12">
-                                <p class="small text-muted">          
+                                <p class="small text-muted">       
                                 {% if affiliation %}
                                     {% for affiliation in affiliation -%}
                                         {% if affiliation.title -%}
-                                            {% if affiliation.url %}<a class="text" href="{{affiliation.url}}">{% endif -%}{{affiliation.title|e}}{% if affiliation.department %}, <em>{{affiliation.department}}</em>{% endif %}{% if affiliation.url %}</a>{% endif %}{% if not loop.last %}<br>{% endif %}
+                                            {% if affiliation.url %}<a class="text" href="{{affiliation.url}}">{% endif -%}
+                                            {{affiliation.title|e}}{% if affiliation.department %}, <em>{{affiliation.department}}</em>{% endif %}{% if affiliation.url %}</a>{% endif %}{% if not loop.last %}<br>{% endif %}
                                         {% endif %}
                                     {% endfor %}                
                                 {% endif %}                                    
@@ -147,83 +122,304 @@ bpersonnel_default_settings = {
                             {% endif %}
                             {% if coordinator_list %}
                             <div class="col-md-12">
-                                <p class="small">Coordinator of <em>{{coordinator_list}}</em></p>
+                                <p class="small text-right">Coordinator of <em>{{coordinator_list}}</em></p>
                             </div>
                             {% endif %}
                             {% if responsibilities %}
                             <div class="col-md-12">
-                                <p class="small"><em>{{responsibilities}}</em></p>
+                                <p class="small text-right"><em>{{responsibilities}}</em></p>
                             </div>
                             {% endif %}
                         </div>
-                    </div>
-                    <div class="col-md-2 col-xs-2">
-                        {% if homepage %}
-                        <a class="icon" href="{{homepage}}"><i class="fa fa-home {{item_css}}"></i></a>
+                    </td>
+                </tr>
+            """,
+            'list': """
+                <div class="col-md-6 col-xs-12">
+                    <div class="row list-group-item-" style="padding-bottom:0.5em;">
+                        {% if photo %}
+                        <div class="col-md-2 col-xs-2">
+                            <img class="img img-circle" src="{{site_url}}/{{ photo }}" alt="{{firstname}} {{lastname}}" width="55px">
+                        </div>
                         {% endif %}
-                        {% if scholar %}
-                        <a class="icon" href="{{scholar}}"><i class="fa fa-google {{item_css}}"></i></a>
-                        {% endif %}
-                        {% if linkedin %}
-                        <a class="icon" href="{{linkedin}}"><i class="fa fa-linkedin {{item_css}}"></i></a>
-                        {% endif %}
-                        {% if email %}
-                        <a class="icon" href="mailto:{{email}}"><i class="fa fa-envelope-o {{item_css}}"></i></a>
-                        {% endif %}
+                        <div class="col-md-8 col-xs-8">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4 class="list-group-item-heading {{item_css}}">{{firstname}} {{lastname}}</h4>
+                                    {% if title %}
+                                    <p class="text-muted">
+                                    {{title}}
+                                    </p>
+                                    {% endif %}
+                                </div>
+                                {% if affiliation_title or affiliation %}
+                                <div class="col-md-12">
+                                    <p class="small text-muted">          
+                                    {% if affiliation %}
+                                        {% for affiliation in affiliation -%}
+                                            {% if affiliation.title -%}
+                                                {% if affiliation.url %}<a class="text" href="{{affiliation.url}}">{% endif -%}{{affiliation.title|e}}{% if affiliation.department %}, <em>{{affiliation.department}}</em>{% endif %}{% if affiliation.url %}</a>{% endif %}{% if not loop.last %}<br>{% endif %}
+                                            {% endif %}
+                                        {% endfor %}                
+                                    {% endif %}                                    
+                                    {% if affiliation_title %}                
+                                        {% if affiliation_url %}<a class="text" href="{{affiliation_url}}">{% endif %}
+                                        {{affiliation_title}}{% if affiliation_department %}, <br><em>{{affiliation_department}}</em>{% endif %}
+                                        {% if affiliation_url %}</a>{% endif %}
+                                    {% endif %}
+                                    </p>
+                                </div>
+                                {% endif %}
+                                {% if coordinator_list %}
+                                <div class="col-md-12">
+                                    <p class="small">Coordinator of <em>{{coordinator_list}}</em></p>
+                                </div>
+                                {% endif %}
+                                {% if responsibilities %}
+                                <div class="col-md-12">
+                                    <p class="small"><em>{{responsibilities}}</em></p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-xs-2">
+                            {% if homepage %}
+                            <a class="icon" href="{{homepage}}"><i class="fa fa-home {{item_css}}"></i></a>
+                            {% endif %}
+                            {% if scholar %}
+                            <a class="icon" href="{{scholar}}"><i class="fa fa-google {{item_css}}"></i></a>
+                            {% endif %}
+                            {% if linkedin %}
+                            <a class="icon" href="{{linkedin}}"><i class="fa fa-linkedin {{item_css}}"></i></a>
+                            {% endif %}
+                            {% if email %}
+                            <a class="icon" href="mailto:{{email}}"><i class="fa fa-envelope-o {{item_css}}"></i></a>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-            </div>
-        """},
-    'person-item-template': """
-        <h4><strong>{{firstname}} {{lastname}}</strong></h4>
-        {% if title %}
-            <p class="text-muted">
-                {{title}}
-            </p>
-        {% endif %}
-        <div class="row">
-            <div class="col-md-10">
-                {% if coordinator_list %}
-                <p>Coordinator of <em>{{coordinator_list}}</em></p>
-                {% endif %}
-                {% if responsibilities %}
-                <p class="small text-muted">Responsibilities: {{responsibilities}}</p>
-                {% endif %}                
-                {% if affiliation_title or affiliation %}
-                <p class="small">                
-                    {% if affiliation %}
-                        {% for affiliation in affiliation -%}
-                            {% if affiliation.title -%}
-                                {% if affiliation.url %}<a class="text" href="{{affiliation.url}}">{% endif -%}{{affiliation.title|e}}{% if affiliation.department %}, <em>{{affiliation.department}}</em>{% endif %}{% if affiliation.url %}</a>{% endif %}{% if not loop.last %}<br>{% endif %}
+            """
+        },
+        'bs5': {
+            'panel': """
+                <tr>
+                    {% if photo %}
+                    <td class="{{item_css}}" style="width: 65px;">
+                        <img class="rounded-circle" src="{{site_url}}/{{ photo }}" alt="{{firstname}} {{lastname}}" width="48px">
+                    </td>
+                    {% endif %}
+                    <td class="{{item_css}}">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <strong>{{firstname}} {{lastname}}</strong>
+                                {% if homepage %}<a class="icon" href="{{homepage}}"><i class="pull-right fa fa-home {{item_css}}"></i></a>{% endif %}
+                                {% if scholar %}<a class="icon" href="{{scholar}}"><i class="pull-right fa fa-google {{item_css}}"></i></a>{% endif %}
+                                {% if linkedin %}<a class="icon" href="{{linkedin}}"><i class="pull-right fa fa-linkedin {{item_css}}"></i></a>{% endif %}
+                                {% if email %}<a class="icon" href="mailto:{{email}}"><i class="pull-right fa fa-envelope-o {{item_css}}"></i></a>{% endif %}
+                            </div>
+                            {% if title %}<div class="col-md-12"><p class="small text-muted">{{title}}</p></div>{% endif %}
+                            {% if affiliation_title or affiliation %}
+                            <div class="col-md-12">
+                                <p class="small text-muted">       
+                                {% if affiliation %}
+                                    {% for affiliation in affiliation -%}
+                                        {% if affiliation.title -%}
+                                            {% if affiliation.url %}<a class="text link-underline link-underline-opacity-0" href="{{affiliation.url}}">{% endif -%}
+                                            {{affiliation.title|e}}{% if affiliation.department %}, <em>{{affiliation.department}}</em>{% endif %}{% if affiliation.url %}</a>{% endif %}{% if not loop.last %}<br>{% endif %}
+                                        {% endif %}
+                                    {% endfor %}                
+                                {% endif %}                                    
+                                {% if affiliation_title %}                
+                                    {% if affiliation_url %}<a class="text link-underline link-underline-opacity-0" href="{{affiliation_url}}">{% endif %}
+                                    {{affiliation_title}}{% if affiliation_department %}, <br><em>{{affiliation_department}}</em>{% endif %}
+                                    {% if affiliation_url %}</a>{% endif %}
+                                {% endif %}
+                                </p>
+                            </div>
                             {% endif %}
-                        {% endfor %}                
-                    {% endif %}                                    
-                    {% if affiliation_title %}                
-                        {% if affiliation_url %}<a class="text" href="{{affiliation_url}}">{% endif %}
-                        {{affiliation_title}}{% if affiliation_department %}, <br><em>{{affiliation_department}}</em>{% endif %}
-                        {% if affiliation_url %}</a>{% endif %}
-                    {% endif %}
+                            {% if coordinator_list %}
+                            <div class="col-md-12">
+                                <p class="small text-right">Coordinator of <em>{{coordinator_list}}</em></p>
+                            </div>
+                            {% endif %}
+                            {% if responsibilities %}
+                            <div class="col-md-12">
+                                <p class="small text-right"><em>{{responsibilities}}</em></p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+            """,
+            'list': """
+                <div class="col-md-6 col-xs-12">
+                    <div class="row list-group-item-" style="padding-bottom:0.5em;">
+                        {% if photo %}
+                        <div class="col-md-2 col-xs-2">
+                            <img class="rounded-circle" src="{{site_url}}/{{ photo }}" alt="{{firstname}} {{lastname}}" width="55px">
+                        </div>
+                        {% endif %}
+                        <div class="col-md-8 col-xs-8">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h5 class="list-group-item-heading {{item_css}}">{{firstname}} {{lastname}}</h5>
+                                    {% if title %}
+                                    <p class="text-muted">
+                                    {{title}}
+                                    </p>
+                                    {% endif %}
+                                </div>
+                                {% if affiliation_title or affiliation %}
+                                <div class="col-md-12">
+                                    <p class="small text-muted">          
+                                    {% if affiliation %}
+                                        {% for affiliation in affiliation -%}
+                                            {% if affiliation.title -%}
+                                                {% if affiliation.url %}<a class="text link-underline link-underline-opacity-" href="{{affiliation.url}}">{% endif -%}{{affiliation.title|e}}{% if affiliation.department %}, <em>{{affiliation.department}}</em>{% endif %}{% if affiliation.url %}</a>{% endif %}{% if not loop.last %}<br>{% endif %}
+                                            {% endif %}
+                                        {% endfor %}                
+                                    {% endif %}                                    
+                                    {% if affiliation_title %}                
+                                        {% if affiliation_url %}<a class="text link-underline link-underline-opacity-" href="{{affiliation_url}}">{% endif %}
+                                        {{affiliation_title}}{% if affiliation_department %}, <br><em>{{affiliation_department}}</em>{% endif %}
+                                        {% if affiliation_url %}</a>{% endif %}
+                                    {% endif %}
+                                    </p>
+                                </div>
+                                {% endif %}
+                                {% if coordinator_list %}
+                                <div class="col-md-12">
+                                    <p class="small">Coordinator of <em>{{coordinator_list}}</em></p>
+                                </div>
+                                {% endif %}
+                                {% if responsibilities %}
+                                <div class="col-md-12">
+                                    <p class="small"><em>{{responsibilities}}</em></p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-xs-2">
+                            {% if homepage %}
+                            <a class="icon" href="{{homepage}}"><i class="fa fa-home {{item_css}}"></i></a>
+                            {% endif %}
+                            {% if scholar %}
+                            <a class="icon" href="{{scholar}}"><i class="fa fa-google {{item_css}}"></i></a>
+                            {% endif %}
+                            {% if linkedin %}
+                            <a class="icon" href="{{linkedin}}"><i class="fa fa-linkedin {{item_css}}"></i></a>
+                            {% endif %}
+                            {% if email %}
+                            <a class="icon" href="mailto:{{email}}"><i class="fa fa-envelope-o {{item_css}}"></i></a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            """
+        }
+    },
+    'person-item-template': {
+        'bs3': """
+            <h4><strong>{{firstname}} {{lastname}}</strong></h4>
+            {% if title %}
+                <p class="text-muted">
+                    {{title}}
                 </p>
-                {% endif %}
-                <p>
-                    {% if homepage %}
-                    <a class="icon" href="{{homepage}}"><i class="text-muted fa fa-home"></i></a>
+            {% endif %}
+            <div class="row">
+                <div class="col-md-10">
+                    {% if coordinator_list %}
+                    <p>Coordinator of <em>{{coordinator_list}}</em></p>
                     {% endif %}
-                    {% if scholar %}
-                    <a class="icon" href="{{scholar}}"><i class="text-muted fa fa-google"></i></a>
+                    {% if responsibilities %}
+                    <p class="small text-muted">Responsibilities: {{responsibilities}}</p>
+                    {% endif %}                
+                    {% if affiliation_title or affiliation %}
+                    <p class="small">                
+                        {% if affiliation %}
+                            {% for affiliation in affiliation -%}
+                                {% if affiliation.title -%}
+                                    {% if affiliation.url %}<a class="text link-underline link-underline-opacity-" href="{{affiliation.url}}">{% endif -%}{{affiliation.title|e}}{% if affiliation.department %}, <em>{{affiliation.department}}</em>{% endif %}{% if affiliation.url %}</a>{% endif %}{% if not loop.last %}<br>{% endif %}
+                                {% endif %}
+                            {% endfor %}                
+                        {% endif %}                                    
+                        {% if affiliation_title %}                
+                            {% if affiliation_url %}<a class="text link-underline link-underline-opacity-" href="{{affiliation_url}}">{% endif %}
+                            {{affiliation_title}}{% if affiliation_department %}, <br><em>{{affiliation_department}}</em>{% endif %}
+                            {% if affiliation_url %}</a>{% endif %}
+                        {% endif %}
+                    </p>
                     {% endif %}
-                    {% if email %}
-                    <a class="icon" href="mailto:{{email}}"><i class="text-muted fa fa-envelope-o"></i></a>
+                    <p>
+                        {% if homepage %}
+                        <a class="icon" href="{{homepage}}"><i class="text-muted fa fa-home"></i></a>
+                        {% endif %}
+                        {% if scholar %}
+                        <a class="icon" href="{{scholar}}"><i class="text-muted fa fa-google"></i></a>
+                        {% endif %}
+                        {% if email %}
+                        <a class="icon" href="mailto:{{email}}"><i class="text-muted fa fa-envelope-o"></i></a>
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="col-md-2">
+                    {% if photo %}
+                    <img class="img img-rounded" src="{{site_url}}/{{ photo }}" alt="{{firstname}} {{lastname}}" height="120px" width="120px">
                     {% endif %}
+                </div>
+            </div>
+        """,
+        'bs5': """
+            <h4><strong>{{firstname}} {{lastname}}</strong></h4>
+            {% if title %}
+                <p class="text-muted">
+                    {{title}}
                 </p>
+            {% endif %}
+            <div class="row">
+                <div class="col-md-10">
+                    {% if coordinator_list %}
+                    <p>Coordinator of <em>{{coordinator_list}}</em></p>
+                    {% endif %}
+                    {% if responsibilities %}
+                    <p class="small text-muted">Responsibilities: {{responsibilities}}</p>
+                    {% endif %}                
+                    {% if affiliation_title or affiliation %}
+                    <p class="small">                
+                        {% if affiliation %}
+                            {% for affiliation in affiliation -%}
+                                {% if affiliation.title -%}
+                                    {% if affiliation.url %}<a class="text link-underline link-underline-opacity-" href="{{affiliation.url}}">{% endif -%}{{affiliation.title|e}}{% if affiliation.department %}, <em>{{affiliation.department}}</em>{% endif %}{% if affiliation.url %}</a>{% endif %}{% if not loop.last %}<br>{% endif %}
+                                {% endif %}
+                            {% endfor %}                
+                        {% endif %}                                    
+                        {% if affiliation_title %}                
+                            {% if affiliation_url %}<a class="text link-underline link-underline-opacity-" href="{{affiliation_url}}">{% endif %}
+                            {{affiliation_title}}{% if affiliation_department %}, <br><em>{{affiliation_department}}</em>{% endif %}
+                            {% if affiliation_url %}</a>{% endif %}
+                        {% endif %}
+                    </p>
+                    {% endif %}
+                    <p>
+                        {% if homepage %}
+                        <a class="icon" href="{{homepage}}"><i class="text-muted fa fa-home"></i></a>
+                        {% endif %}
+                        {% if scholar %}
+                        <a class="icon" href="{{scholar}}"><i class="text-muted fa fa-google"></i></a>
+                        {% endif %}
+                        {% if email %}
+                        <a class="icon" href="mailto:{{email}}"><i class="text-muted fa fa-envelope-o"></i></a>
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="col-md-2">
+                    {% if photo %}
+                    <img class="img img-rounded" src="{{site_url}}/{{ photo }}" alt="{{firstname}} {{lastname}}" height="120px" width="120px">
+                    {% endif %}
+                </div>
             </div>
-            <div class="col-md-2">
-                {% if photo %}
-                <img class="img img-rounded" src="{{site_url}}/{{ photo }}" alt="{{firstname}} {{lastname}}" height="120px" width="120px">
-                {% endif %}
-            </div>
-        </div>
-    """,
+        """,
+    },
     'data-source': None,
     'set': None,
     'show': False,
@@ -393,7 +589,7 @@ def generate_person_card(settings):
             elif field not in valid_fields:
                 filtered_fields[field] = None
 
-        template = Template(settings['person-item-template'].strip('\t\r\n').replace('&gt;', '>').replace('&lt;', '<'))
+        template = Template(settings['person-item-template'][settings['template-mode']].strip('\t\r\n').replace('&gt;', '>').replace('&lt;', '<'))
 
         filtered_fields['site_url'] = settings['site-url']
         html = BeautifulSoup(template.render(**filtered_fields), "html.parser")
@@ -434,7 +630,13 @@ def generate_listing(settings):
 
         html += "\n"
 
-        template = Template(settings['template'][settings['mode']].strip('\t\r\n').replace('&gt;', '>').replace('&lt;', '<'))
+        template = Template(settings['template'][settings['template-mode']][settings['mode']].strip('\t\r\n').replace('&gt;', '>').replace('&lt;', '<'))
+
+        if settings['template-mode'] == 'bs5':
+            settings['panel-color'] = process_panel_color(
+                panel_color=settings['panel-color'],
+                mode=settings['template-mode']
+            )
 
         return BeautifulSoup(template.render(list=html,
                                              header=settings.get('header'),
@@ -481,12 +683,50 @@ def generate_listing_item(person, settings, main_highlight=False):
         elif field not in valid_fields:
             filtered_fields[field] = None
 
-    template = Template(settings['item-template'][settings['mode']].strip('\t\r\n').replace('&gt;', '>').replace('&lt;', '<'))
+    template = Template(settings['item-template'][settings['template-mode']][settings['mode']].strip('\t\r\n').replace('&gt;', '>').replace('&lt;', '<'))
     filtered_fields['site_url'] = settings['site-url']
     filtered_fields['item_css'] = item_css
 
     html = BeautifulSoup(template.render(**filtered_fields), "html.parser")
     return html.decode()
+
+
+def process_panel_color(panel_color, mode='bs3'):
+    text_color = ''
+
+    if mode == 'bs3':
+        if 'bg-' in panel_color:
+            panel_color = panel_color.replace('bg-', 'panel-')
+
+    elif mode == 'bs5':
+        # Convert bs3 colors
+        if panel_color.startswith('panel-'):
+            panel_color = panel_color.replace('panel-', 'bg-')
+            if 'default' not in panel_color and '-subtle' not in panel_color:
+                panel_color += '-subtle'
+
+        elif panel_color in ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark', 'body', 'white', 'transparent']:
+            panel_color = 'bg-' + panel_color + '-subtle'
+
+        if panel_color == 'bg-default':
+            panel_color = 'bg-secondary-subtle'
+
+        # Determine the text color
+        # If subtle colors are used, use matching emphasis text color
+        if '-subtle' in panel_color and 'text-' not in panel_color:
+            text_color = ' ' + panel_color.replace('bg-', 'text-').replace('-subtle', '-emphasis')
+
+        # otherwise handcraft colors
+        elif '-subtle' not in panel_color:
+            if panel_color in ['bg-primary', 'bg-secondary', 'bg-success', 'bg-danger', 'bg-dark', 'bg-black']:
+                text_color = ' text-white'
+            elif panel_color in ['bg-warning', 'bg-info', 'bg-light']:
+                text_color = ' text-dark'
+            else:
+                text_color = ' text-muted'
+
+    return panel_color + text_color
+
 
 
 def bpersonnel(content):
@@ -537,6 +777,12 @@ def bpersonnel(content):
             settings['mode'] = get_attribute(bpersonnel_div.attrs, 'mode', bpersonnel_settings['mode'])
             settings['header'] = get_attribute(bpersonnel_div.attrs, 'header', bpersonnel_settings['header'])
             settings['panel-color'] = get_attribute(bpersonnel_div.attrs, 'panel-color', bpersonnel_settings['panel-color'])
+            if settings['template-mode'] == 'bs5':
+                settings['panel-color'] = process_panel_color(
+                    panel_color=settings['panel-color'],
+                    mode=settings['template-mode']
+                )
+
             settings['fields'] = get_attribute(bpersonnel_div.attrs, 'fields', bpersonnel_settings['fields'])
 
             if isinstance(settings['fields'], str):
@@ -578,6 +824,12 @@ def bpersonnel(content):
             settings['mode'] = get_attribute(bpersonnel_card_div.attrs, 'mode', bpersonnel_settings['mode'])
             settings['header'] = get_attribute(bpersonnel_card_div.attrs, 'header', bpersonnel_settings['header'])
             settings['panel-color'] = get_attribute(bpersonnel_card_div.attrs, 'panel-color', bpersonnel_settings['panel-color'])
+            if settings['template-mode'] == 'bs5':
+                settings['panel-color'] = process_panel_color(
+                    panel_color=settings['panel-color'],
+                    mode=settings['template-mode']
+                )
+
             settings['person-firstname'] = get_attribute(bpersonnel_card_div.attrs, 'person-firstname', bpersonnel_settings['person-firstname'])
             settings['person-lastname'] = get_attribute(bpersonnel_card_div.attrs, 'person-lastname', bpersonnel_settings['person-lastname'])
             settings['fields'] = get_attribute(bpersonnel_card_div.attrs, 'fields', bpersonnel_settings['fields'])
@@ -642,6 +894,9 @@ def init_default_config(pelican):
 
     if 'BPERSONNEL_SOURCE' in pelican.settings:
         bpersonnel_default_settings['data-source'] = pelican.settings['BPERSONNEL_SOURCE']
+
+    if 'BPERSONNEL_TEMPLATE_MODE' in pelican.settings:
+        bpersonnel_default_settings['template-mode'] = pelican.settings['BPERSONNEL_TEMPLATE_MODE']
 
     if 'BPERSONNEL_TEMPLATE' in pelican.settings:
         bpersonnel_default_settings['template'].update(pelican.settings['BPERSONNEL_TEMPLATE'])
