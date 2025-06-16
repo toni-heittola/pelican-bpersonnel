@@ -212,10 +212,10 @@ bpersonnel_default_settings = {
                         <div class="row">
                             <div class="col-md-12">
                                 <strong>{{firstname}} {{lastname}}</strong>
-                                {% if homepage %}<a class="icon" href="{{homepage}}"><i class="pull-right fa fa-home {{item_css}}"></i></a>{% endif %}
-                                {% if scholar %}<a class="icon" href="{{scholar}}"><i class="pull-right fa fa-google {{item_css}}"></i></a>{% endif %}
-                                {% if linkedin %}<a class="icon" href="{{linkedin}}"><i class="pull-right fa fa-linkedin {{item_css}}"></i></a>{% endif %}
-                                {% if email %}<a class="icon" href="mailto:{{email}}"><i class="pull-right fa fa-envelope-o {{item_css}}"></i></a>{% endif %}
+                                {% if homepage %}<a class="icon" href="{{homepage}}"><i class="pull-right fa fa-solid fa-home {{item_css}}"></i></a>{% endif %}
+                                {% if scholar %}<a class="icon" href="{{scholar}}"><i class="pull-right fa fa-brands fa-google {{item_css}}"></i></a>{% endif %}
+                                {% if linkedin %}<a class="icon" href="{{linkedin}}"><i class="pull-right fa fa-brands fa-linkedin {{item_css}}"></i></a>{% endif %}
+                                {% if email %}<a class="icon" href="mailto:{{email}}"><i class="pull-right fa fa-solid fa-envelope-o {{item_css}}"></i></a>{% endif %}
                             </div>
                             {% if title %}<div class="col-md-12"><p class="small text-muted">{{title}}</p></div>{% endif %}
                             {% if affiliation_title or affiliation %}
@@ -301,16 +301,16 @@ bpersonnel_default_settings = {
                         </div>
                         <div class="col-md-2 col-xs-2">
                             {% if homepage %}
-                            <a class="icon" href="{{homepage}}"><i class="fa fa-home {{item_css}}"></i></a>
+                            <a class="icon" href="{{homepage}}"><i class="fa fa-solid fa-home {{item_css}}"></i></a>
                             {% endif %}
                             {% if scholar %}
-                            <a class="icon" href="{{scholar}}"><i class="fa fa-google {{item_css}}"></i></a>
+                            <a class="icon" href="{{scholar}}"><i class="fa fa-brands fa-google {{item_css}}"></i></a>
                             {% endif %}
                             {% if linkedin %}
-                            <a class="icon" href="{{linkedin}}"><i class="fa fa-linkedin {{item_css}}"></i></a>
+                            <a class="icon" href="{{linkedin}}"><i class="fa fa-brands fa-linkedin {{item_css}}"></i></a>
                             {% endif %}
                             {% if email %}
-                            <a class="icon" href="mailto:{{email}}"><i class="fa fa-envelope-o {{item_css}}"></i></a>
+                            <a class="icon" href="mailto:{{email}}"><i class="fa fa-solid fa-envelope-o {{item_css}}"></i></a>
                             {% endif %}
                         </div>
                     </div>
@@ -402,13 +402,13 @@ bpersonnel_default_settings = {
                     {% endif %}
                     <p>
                         {% if homepage %}
-                        <a class="icon" href="{{homepage}}"><i class="text-muted fa fa-home"></i></a>
+                        <a class="icon" href="{{homepage}}"><i class="text-muted fa fa-solid fa-home"></i></a>
                         {% endif %}
                         {% if scholar %}
-                        <a class="icon" href="{{scholar}}"><i class="text-muted fa fa-google"></i></a>
+                        <a class="icon" href="{{scholar}}"><i class="text-muted fa fa-brands fa-google"></i></a>
                         {% endif %}
                         {% if email %}
-                        <a class="icon" href="mailto:{{email}}"><i class="text-muted fa fa-envelope-o"></i></a>
+                        <a class="icon" href="mailto:{{email}}"><i class="text-muted fa fa-solid fa-envelope-o"></i></a>
                         {% endif %}
                     </p>
                 </div>
